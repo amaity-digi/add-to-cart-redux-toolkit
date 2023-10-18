@@ -40,9 +40,29 @@ const cartSlice = createSlice({
     );
     state.totalPrice = parseInt(totalPrice.toFixed(2)); // tofix because It will take only 2 desimal
     state.totalQuantity = totalQuantity;
-  } 
+  }, 
+
+  removeItem: (state, action) => {
+    state.cart = state.cart.filter((item) => item.id !== action.payload)
+  },
+
+  increaseItemQuantity: (state, action) => {
+    state.cart = state.cart.map((item) => {
+      if(item.id === action.payload){
+        return {...item, quantity: item.quantity + 1}
+      }
+    })
+  },
+
+  decreaseItemQuantity: (state, action) => {
+    state.cart = state.cart.map((item) => {
+      if(item.id === action.payload){
+        return {...item, quantity: item.quantity - 1}
+      }
+    })
+  }
 },
 });
-export const { addToCart, getCartTotal } = cartSlice.actions;
+export const { addToCart, getCartTotal, removeItem, increaseItemQuantity, decreaseItemQuantity } = cartSlice.actions;
 
 export default cartSlice.reducer;

@@ -1,14 +1,21 @@
 import { useDispatch, useSelector } from "react-redux";
-import { getCartTotal } from "../features/cartSlice";
+import {
+  getCartTotal,
+  removeItem,
+  increaseItemQuantity,
+  decreaseItemQuantity,
+} from "../features/cartSlice";
 import { useEffect } from "react";
 
 function AddToCart() {
-  const {cart, totalQuantity, totalPrice} = useSelector((state) => state.allCarts)
+  const { cart, totalQuantity, totalPrice } = useSelector(
+    (state) => state.allCarts
+  );
   console.log(cart, totalQuantity, totalPrice);
   const dispatch = useDispatch();
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(getCartTotal());
-  },[cart])
+  }, [cart]);
 
   return (
     <div>
@@ -21,9 +28,7 @@ function AddToCart() {
                   <h5 className="mb-0">Cart - {cart.length} items</h5>
                 </div>
                 <div className="card-body">
-                  { cart?.map((item) => (
-
-                
+                  {cart?.map((item) => (
                     <div className="row" key={item.id}>
                       <div className="col-lg-3 col-md-12 mb-4 mb-lg-0">
                         <div
@@ -42,16 +47,16 @@ function AddToCart() {
                         <p>
                           <strong>{item.title}</strong>
                         </p>
-                      
+
                         <button
                           type="button"
                           className="btn btn-primary btn-sm me-1 mb-2"
                           data-mdb-toggle="tooltip"
                           title="Remove item"
+                          onClick={() => dispatch(removeItem(item.id))}
                         >
                           <i className="fas fa-trash"></i>
                         </button>
-                       
                       </div>
 
                       <div className="col-lg-4 col-md-6 mb-4 mb-lg-0">
@@ -59,6 +64,14 @@ function AddToCart() {
                           className="d-flex mb-4"
                           style={{ maxWidth: "300px" }}
                         >
+                          <button
+                            className="btn btn-primary px-3 me-2"
+                            onClick={() =>
+                              dispatch(decreaseItemQuantity(item.id))
+                            }
+                          >
+                            <i className="fas fa-minus"></i>
+                          </button>
                           <div className="form-outline">
                             <input
                               id="form1"
@@ -67,9 +80,18 @@ function AddToCart() {
                               value={item.quantity}
                               type="number"
                               className="form-control"
+                              onChange={() => null}
                             />
                             <label className="form-label">Quantity</label>
                           </div>
+                          <button
+                            className="btn btn-primary px-3 ms-2"
+                            onClick={() =>
+                              dispatch(increaseItemQuantity(item.id))
+                            }
+                          >
+                            <i className="fas fa-plus"></i>
+                          </button>
                         </div>
 
                         <p className="text-start text-md-center">
@@ -77,8 +99,7 @@ function AddToCart() {
                         </p>
                       </div>
                     </div>
-                      ))
-                  }
+                  ))}
                   <hr className="my-4" />
                 </div>
               </div>
