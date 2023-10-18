@@ -7,31 +7,39 @@ import {
   MDBBtn,
   MDBContainer,
   MDBRow,
-  MDBCol
-} from 'mdb-react-ui-kit';
+  MDBCol,
+} from "mdb-react-ui-kit";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../features/cartSlice";
 
- function ProductCart() {
+function ProductCart() {
+  const items = useSelector((state) => state.allCarts.items);
+  const dispatch = useDispatch();
+
   return (
-    <div className='m-2'>
-        <MDBContainer>
-      <MDBRow className='mb-3'>
-      <MDBCol size='4'>
-    <MDBCard>
-      <MDBCardImage src='https://mdbootstrap.com/img/new/standard/nature/184.webp' position='top' alt='...' />
-      <MDBCardBody>
-        <MDBCardTitle>Card title</MDBCardTitle>
-        <MDBCardText>
-          Some quick example text to build on the card title and make up the bulk of the card content.
-        </MDBCardText>
-        <MDBBtn href='#'>Button</MDBBtn>
-      </MDBCardBody>
-    </MDBCard>
-    </MDBCol>
-    </MDBRow>
-    </MDBContainer>
+    <div className="m-2">
+      <MDBContainer>
+        <MDBRow className="mb-3">
+          {items?.map((item)=> (
+
+        
+          <MDBCol size="4" key={item.id}>
+            <MDBCard>
+              <MDBCardImage src={item.img} position="top" alt="..." />
+              <MDBCardBody>
+                <MDBCardTitle>{item.title}</MDBCardTitle>
+                <MDBCardText>
+                 {item.price}
+                </MDBCardText>
+                <MDBBtn onClick={() => dispatch(addToCart(item))}>Add To Cart</MDBBtn>
+              </MDBCardBody>
+            </MDBCard>
+          </MDBCol>
+            ))}
+        </MDBRow>
+      </MDBContainer>
     </div>
   );
 }
 
 export default ProductCart;
-
